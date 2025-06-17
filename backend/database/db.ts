@@ -17,7 +17,7 @@ connectionDB.connect((err) => {
     if(err){
         console.error('database not connected');
     }else{
-        console.log('connected database');
+        console.log('✅ connected to the database');
     }
 });
 
