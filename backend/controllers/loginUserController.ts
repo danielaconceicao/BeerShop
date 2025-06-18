@@ -1,55 +1,40 @@
 import { Request, Response } from "express";
 import { UserRequest } from "../types";
 import db from '../database/db';
-import { QueryError } from "mysql2";
 import bcrypt from 'bcrypt';
 
-function login(req: Request<object, object, UserRequest>, res: Response) {
+
+//verificare le credenziali di un utente che cerca di accedere al sistema
+export const login = async (req: Request<object, object, UserRequest>, res: Response): Promise<void> => {
     const { email, pass } = req.body;
 
-    if (!email || !pass) {
-        res.status(400).json({ error: 'Email and password are required' });
-        return;
-    }
+    try {
+        //Cerca l'utente nel database tramite email
+        const [result] = await db.query<UserRequest[]>('SELECT * FROM users WHERE email = ?', [email]); 
 
-    const query = 'SELECT * FROM users WHERE email = ?';
-    db.query(query, [email], (error: QueryError | null, results) => {
-        if (error) {
-            console.error('Error querying the database:', error);
-            res.status(500).json({ error: 'Internal server error' });
+        const users = result as UserRequest[];//converte o resultado da consulta para o tipo UserRequest
+
+        if (users.length === 0){ //controlla se nessun utente è stato trovato con l'email fornita
+            res.status(401).json({ error: 'Email or password incorrect' });
             return;
         }
 
-        const users = results as UserRequest[];
+        const user = users[0];//prende il primo utente trovato
 
-        if (users.length === 0) return res.status(401).json({ error: 'Email or password incorrect' });
+        //confronta la password fornita con la password hashata 
+        const isMatch = await bcrypt.compare(pass, user.pass);
 
-        const user = users[0];
+        //se le password non corrispondono
+        if (!isMatch) {
+            res.status(401).json({ error: 'Email or password incorrect' });
+            return;
+        }
 
-        bcrypt.compare(pass, user.pass, (bcryptErr, isMatch) => {
-            if (bcryptErr) {
-                console.error('Error comparing passwords:', bcryptErr);
-                res.status(500).json({ error: 'Internal server error' });
-                return;
-            }
-
-            if (!isMatch) {
-                res.status(401).json({ error: 'Email or password incorrect' });
-                return;
-            }
-
-            res.status(200).json({
-                message: 'Login successful!',
-                user: {
-                    id: user.id,
-                    email: user.email,
-                    name: user.first_name
-                }
-            });
-        });
-
-    });
-
+        //se il login ha successo
+        res.status(200).json({ message: 'Login successful!' });
+    } catch (error) {
+        console.error('❌ Error querying the database:', error);
+        res.status(500).json({ error: 'Internal server error' });
+    }
 }
 
-export default { login }
