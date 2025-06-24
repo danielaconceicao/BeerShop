@@ -1,0 +1,21 @@
+:root {
+    --btnLogin: #F2BF27;
+    --btnColor: #BF3706;
+    --btnHover: #F2CB05;
+    --layoutColor: #0539594d;
+}
+
+.position {
+    position: relative;
+
+
+    .eye {
+        position: absolute;
+        bottom: 7px;
+        left: 220px;
+    }
+}
+
+.loginActions {
+    text-align: center;
+}

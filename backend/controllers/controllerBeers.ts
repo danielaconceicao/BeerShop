@@ -1,13 +1,13 @@
 import pool from '../database/db';
 import { Response, Request } from 'express';
-import { BeersRequest, ReviewsRequest } from '../types';
+import { BeerFromDB , ReviewFromDB  } from '../types';
 
 //cerca e restituisce tutti i dati sulla birra dal database
 export const getBeers = async (req: Request, res: Response) => {
     const dbBeers = 'SELECT product_name, abv, size, brewery, style, country, id, tasting_notes FROM beers';
 
     try {
-        const [results] = await pool.query<BeersRequest[]>(dbBeers);
+        const [results] = await pool.query<BeerFromDB []>(dbBeers);
         res.status(200).json(results);
     } catch (error) {
         console.error('❌ Error getting beers:', error);
@@ -27,7 +27,7 @@ export const getBeerById = async (req: Request, res: Response): Promise<void> =>
     }
 
     try {
-        const [beerResult] = await pool.query<BeersRequest[]>('SELECT * FROM beers WHERE id = ?', [id]);
+        const [beerResult] = await pool.query<BeerFromDB []>('SELECT * FROM beers WHERE id = ?', [id]);
 
         //se nessuna birra viene trovata, risponde con un errore 404
         if (beerResult.length === 0) {
@@ -35,7 +35,7 @@ export const getBeerById = async (req: Request, res: Response): Promise<void> =>
             return;
         }
 
-        const [reviewsResult] = await pool.query<ReviewsRequest[]>('SELECT * FROM reviews WHERE beer_id = ?', [id]);
+        const [reviewsResult] = await pool.query<ReviewFromDB []>('SELECT * FROM reviews WHERE beer_id = ?', [id]);
 
         //dettagli della birra insieme alle sue recensioni
         res.status(200).json({

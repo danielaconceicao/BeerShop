@@ -2,7 +2,7 @@ import db from '../database/db';
 import { Request, Response } from 'express';
 import bcrypt from 'bcrypt';
 import { ResultSetHeader } from 'mysql2';
-import { UserRequest } from '../types';
+import { UserFromDB  } from '../types';
 import { MySQLError } from '../types';
 
 //verifica se l'oggetto errore è un errore di MySQL 
@@ -14,7 +14,7 @@ function isMySQLError(error: unknown): error is MySQLError {
     return false
 }
 
-export const createUser = async (req: Request<object, object, UserRequest>, res: Response): Promise<void> => {
+export const createUser = async (req: Request<object, object, UserFromDB >, res: Response): Promise<void> => {
 
     const { email, first_name, pass } = req.body;
 

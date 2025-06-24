@@ -1,0 +1,55 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+:root {
+    --free-message: #053959;
+    --color: #BF3706;
+    --header: #F2BF27;
+    --header-color: #A6215F
+}
+
+.loginContainer, .registrationContainer {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    gap: 1rem;
+    height: calc(100vh - 240px);
+    align-items: center;
+    background-color: var(--layoutColor);
+    color: var(--btnColor);
+
+    form {
+        display: flex;
+        flex-direction: column;
+        gap: 1rem;
+
+        input {
+            width: 100%;
+            font-size: .8rem;
+            padding: .5rem 1rem .5rem 1rem;
+            border-radius: .3rem;
+            border-color: var(--btnColor);
+        }
+
+
+        button {
+            padding: .3rem 0;
+            background-color: var(--btnLogin);
+            color: var(--btnColor);
+            cursor: pointer;
+            border-color: var(--btnColor);
+            border-radius: .6rem;
+
+            &:hover {
+                background-color: var(--btnHover);
+            }
+        }
+    }
+
+    .loginActions{
+        text-align: center;
+    }
+}

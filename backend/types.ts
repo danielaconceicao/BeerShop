@@ -1,12 +1,12 @@
 import { RowDataPacket } from "mysql2";
-export interface UserRequest extends RowDataPacket {
+export interface UserFromDB  extends RowDataPacket {
   email: string,
   pass: string,
   id?: number,
   first_name: string,
 }
 
-export interface BeersRequest extends RowDataPacket {
+export interface BeerFromDB  extends RowDataPacket {
   product_name: string,
   abv: number,
   size: string,
@@ -17,7 +17,7 @@ export interface BeersRequest extends RowDataPacket {
   tasting_notes: string
 }
 
-export interface ReviewsRequest extends RowDataPacket {
+export interface ReviewFromDB  extends RowDataPacket {
   rating: number,
   comment: string,
   reviewer_name: string,
@@ -28,5 +28,16 @@ export interface ReviewsRequest extends RowDataPacket {
 export interface MySQLError {
   code: string;
   message: string;
+}
+
+export interface JwtPayload {
+  id: number,
+  email: string
+}
+
+declare module 'express-serve-static-core' {
+  interface Request {
+    user?: JwtPayload
+  }
 }
 

@@ -1,0 +1,22 @@
+.btn {
+    background-color: var(--btnLogin);
+    border-radius: .6rem;
+    padding: .3rem 4rem;
+    color: var(--btnColor);
+    cursor: pointer;
+    border-color: var(--btnColor);
+
+    &:hover {
+        background-color: var(--btnHover);
+    }
+}
+
+.errorMessage{
+    color: red;
+    font-weight: bolder;
+}
+
+.successMessage{
+    color: green;
+    font-weight: bolder;
+}
